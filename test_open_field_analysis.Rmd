@@ -45,7 +45,7 @@ Read in the open field test raw data (**Analysis Output-AV Test Open Field.csv**
 
 ```{r, message = FALSE}
 # Import open field data
-openFieldDataRaw <- read_csv("Analysis Output-AV Test Open Field.csv", skip = 4, 
+openFieldDataRaw <- read_csv("Analysis Output-AV Open Field.csv", skip = 4, 
                             col_names = header, na = c("", "NA", "-"))
 
 # Take a look at the raw open field data
