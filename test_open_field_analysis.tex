@@ -1,0 +1,540 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Test Open Field Analysis},
+            pdfauthor={Adam Lu},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Test Open Field Analysis}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Adam Lu}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{December 7th, 2018}
+
+
+\begin{document}
+\maketitle
+
+\subsection{Read in the raw data}\label{read-in-the-raw-data}
+
+The file \textbf{Analysis Output-AV Test Open Field.csv} is TODO:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Load libraries (tidyverse includes readr, dplyr, ggplot2 ... etc.)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(ggbeeswarm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Import open field data}
+\NormalTok{openFieldDataRaw <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"Analysis Output-AV Test Open Field.csv"}\NormalTok{, }\DataTypeTok{skip =} \DecValTok{4}\NormalTok{, }
+                            \DataTypeTok{col_names =}\NormalTok{ header, }\DataTypeTok{na =} \KeywordTok{c}\NormalTok{(}\StringTok{""}\NormalTok{, }\StringTok{"NA"}\NormalTok{, }\StringTok{"-"}\NormalTok{))}
+
+\CommentTok{# Take a look at the raw open field data}
+\NormalTok{openFieldDataRaw}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 20 x 10
+##    `Trial #` `In Border:Peri~ `In Border:Peri~ `In Border:Peri~
+##        <dbl>            <dbl>            <dbl>            <dbl>
+##  1         1             599.                1           1.27  
+##  2         2             563.               15           0     
+##  3         3             581.               14           0.267 
+##  4         4             594.                7           0.534 
+##  5         5             553.               13           0     
+##  6         6             593.                4           0.334 
+##  7         7             566.               24           0     
+##  8         8             598.                4           0     
+##  9         9             576.               13           0     
+## 10        10             590.                4           0     
+## 11        11             586.                6           5.47  
+## 12        12             584.               13           0     
+## 13        13             567.               25           0.0667
+## 14        14             587.               13           0     
+## 15        15             585.                9           0     
+## 16        16             577.               13           0     
+## 17        17             597.                4           0.334 
+## 18        18             566.               23           1.40  
+## 19        19             596.                5           0     
+## 20        20             588.               11           0     
+## # ... with 6 more variables: `In Center:Center:Duration` <dbl>, `In
+## #   Center:Center:Frequency` <dbl>, `In Center:Center:Latency to
+## #   first` <dbl>, `In Zone:Center/Center-point:Duration` <dbl>, `In
+## #   Zone:Center/Center-point:Frequency` <dbl>, `In
+## #   Zone:Center/Center-point:Latency to first` <dbl>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Import injections data}
+\NormalTok{injectionsDataRaw <-}\StringTok{ }\KeywordTok{read_csv}\NormalTok{(}\StringTok{"Injections Data.csv"}\NormalTok{, }\DataTypeTok{n_max =} \DecValTok{20}\NormalTok{)}
+
+\CommentTok{# Take a look at the injections data}
+\NormalTok{injectionsDataRaw}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 20 x 29
+##    Treatment Sex   Tag   `12-Oct` `13-Oct` `14-Oct` `15-Oct` `16-Oct`
+##        <dbl> <chr> <chr>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+##  1         0 F     1L          25       27       31       34       36
+##  2         1 M     2L          27       29       33       37       36
+##  3         0 M     3L          25       27       31       33       34
+##  4         1 F     1R          23       24       28       30       33
+##  5         0 M     2R          25       27       31       34       35
+##  6         1 F     3R          21       23       25       27       30
+##  7         0 M     1L-1R       27       30       34       36       37
+##  8         1 M     1L-2R       28       29       32       36       38
+##  9         0 F     2L-2R       26       27       31       33       35
+## 10         1 F     2L-1R       27       28       31       34       36
+## 11         0 F     1L          21       25       27       31       32
+## 12         1 F     2L          23       25       28       30       33
+## 13         0 M     3L          23       27       30       32       36
+## 14         1 M     1R          24       26       28       32       34
+## 15         0 M     2L-1R       23       26       28       31       33
+## 16         1 M     3R          24       27       30       33       36
+## 17         0 M     1L-1R       25       27       30       33       35
+## 18         1 F     1L-2R       22       25       27       30       32
+## 19         0 F     2L-2R       23       26       29       31       35
+## 20         1 F     2R          23       26       29       30       33
+## # ... with 21 more variables: `17-Oct` <dbl>, `18-Oct` <dbl>,
+## #   `19-Oct` <dbl>, `20-Oct` <dbl>, `21-Oct` <dbl>, `22-Oct` <dbl>,
+## #   `23-Oct` <dbl>, `24-Oct` <dbl>, `25-Oct` <dbl>, `26-Oct` <dbl>,
+## #   `27-Oct` <dbl>, `28-Oct` <dbl>, `29-Oct` <dbl>, `30-Oct` <dbl>,
+## #   `31-Oct` <dbl>, `Parent Cage #` <dbl>, `Current Cage #` <dbl>, `Trial
+## #   # Open Field` <dbl>, `Trial # Familiar Object` <dbl>, `Trial # Novel
+## #   Object` <dbl>, Comments <chr>
+\end{verbatim}
+
+Create a table that maps treatment numbers to treatment strings
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Create a dictionary for Treatment}
+\NormalTok{treatmentTypeTable <-}\StringTok{ }
+\StringTok{    }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{Treatment =} \DecValTok{0}\OperatorTok{:}\DecValTok{1}\NormalTok{, }\DataTypeTok{TreatmentStr =} \KeywordTok{c}\NormalTok{(}\StringTok{"Control"}\NormalTok{, }\StringTok{"Ethosuximide"}\NormalTok{))}
+
+\CommentTok{# Display the table}
+\NormalTok{treatmentTypeTable}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   Treatment TreatmentStr
+##       <int> <chr>       
+## 1         0 Control     
+## 2         1 Ethosuximide
+\end{verbatim}
+
+\subsection{Combine and rearrage the
+data}\label{combine-and-rearrage-the-data}
+
+TODO
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Join the tables}
+\NormalTok{openFieldDataExpanded <-}\StringTok{ }
+\StringTok{    }\NormalTok{openFieldDataRaw }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{full_join}\NormalTok{(injectionsDataRaw, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"Trial #"}\NormalTok{ =}\StringTok{ "Trial # Open Field"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{full_join}\NormalTok{(treatmentTypeTable, }\DataTypeTok{by =} \StringTok{"Treatment"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{durationInCenter =} \StringTok{`}\DataTypeTok{In Zone:Center/Center-point:Duration}\StringTok{`}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{durationInBorder =} \StringTok{`}\DataTypeTok{In Border:Periphery/Center-point:Duration}\StringTok{`}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Sex =} \KeywordTok{factor}\NormalTok{(Sex)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{TreatmentStr =} \KeywordTok{factor}\NormalTok{(TreatmentStr)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{durationRatio =}\NormalTok{ durationInBorder }\OperatorTok{/}\StringTok{ }\NormalTok{durationInCenter)}
+
+\CommentTok{# Take a glimpse of all the variables in the data }
+\KeywordTok{glimpse}\NormalTok{(openFieldDataExpanded)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Observations: 20
+## Variables: 42
+## $ `Trial #`                                           <dbl> 1, 2, 3, 4...
+## $ `In Border:Periphery/Center-point:Duration`         <dbl> 598.7988, ...
+## $ `In Border:Periphery/Center-point:Frequency`        <dbl> 1, 15, 14,...
+## $ `In Border:Periphery/Center-point:Latency to first` <dbl> 1.267934, ...
+## $ `In Center:Center:Duration`                         <dbl> NA, 57.123...
+## $ `In Center:Center:Frequency`                        <dbl> 0, 27, 24,...
+## $ `In Center:Center:Latency to first`                 <dbl> NA, 88.755...
+## $ `In Zone:Center/Center-point:Duration`              <dbl> NA, 37.103...
+## $ `In Zone:Center/Center-point:Frequency`             <dbl> 0, 15, 13,...
+## $ `In Zone:Center/Center-point:Latency to first`      <dbl> NA, 89.289...
+## $ Treatment                                           <dbl> 0, 0, 1, 0...
+## $ Sex                                                 <fct> F, F, F, M...
+## $ Tag                                                 <chr> "2L-2R", "...
+## $ `12-Oct`                                            <dbl> 26, 25, 21...
+## $ `13-Oct`                                            <dbl> 27, 27, 23...
+## $ `14-Oct`                                            <dbl> 31, 31, 25...
+## $ `15-Oct`                                            <dbl> 33, 34, 27...
+## $ `16-Oct`                                            <dbl> 35, 36, 30...
+## $ `17-Oct`                                            <dbl> 38, 39, 32...
+## $ `18-Oct`                                            <dbl> 41, 42, 34...
+## $ `19-Oct`                                            <dbl> 43, 45, 36...
+## $ `20-Oct`                                            <dbl> 47, 49, 40...
+## $ `21-Oct`                                            <dbl> 52, 53, 44...
+## $ `22-Oct`                                            <dbl> 58, 59, 50...
+## $ `23-Oct`                                            <dbl> 63, 64, 56...
+## $ `24-Oct`                                            <dbl> 69, 71, 62...
+## $ `25-Oct`                                            <dbl> 76, 76, 67...
+## $ `26-Oct`                                            <dbl> 83, 86, 78...
+## $ `27-Oct`                                            <dbl> 87, 90, 81...
+## $ `28-Oct`                                            <dbl> 93, 99, 90...
+## $ `29-Oct`                                            <dbl> 99, 107, 9...
+## $ `30-Oct`                                            <dbl> 106, 114, ...
+## $ `31-Oct`                                            <dbl> 112, 123, ...
+## $ `Parent Cage #`                                     <dbl> 1, 1, 1, 1...
+## $ `Current Cage #`                                    <dbl> 1, 1, 1, 4...
+## $ `Trial # Familiar Object`                           <dbl> 1, 2, 3, 4...
+## $ `Trial # Novel Object`                              <dbl> 5, 6, 7, 8...
+## $ Comments                                            <chr> NA, NA, NA...
+## $ TreatmentStr                                        <fct> Control, C...
+## $ durationInCenter                                    <dbl> NA, 37.103...
+## $ durationInBorder                                    <dbl> 598.7988, ...
+## $ durationRatio                                       <dbl> NA, 15.174...
+\end{verbatim}
+
+Remove the first row because TODO
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Select all but the first row}
+\NormalTok{openFieldDataFiltered <-}\StringTok{ }
+\StringTok{    }\NormalTok{openFieldDataExpanded }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{slice}\NormalTok{(}\DecValTok{2}\OperatorTok{:}\KeywordTok{n}\NormalTok{())}
+
+\CommentTok{# Take a look at the data with rows filtered}
+\NormalTok{openFieldDataFiltered}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 19 x 42
+##    `Trial #` `In Border:Peri~ `In Border:Peri~ `In Border:Peri~
+##        <dbl>            <dbl>            <dbl>            <dbl>
+##  1         2             563.               15           0     
+##  2         3             581.               14           0.267 
+##  3         4             594.                7           0.534 
+##  4         5             553.               13           0     
+##  5         6             593.                4           0.334 
+##  6         7             566.               24           0     
+##  7         8             598.                4           0     
+##  8         9             576.               13           0     
+##  9        10             590.                4           0     
+## 10        11             586.                6           5.47  
+## 11        12             584.               13           0     
+## 12        13             567.               25           0.0667
+## 13        14             587.               13           0     
+## 14        15             585.                9           0     
+## 15        16             577.               13           0     
+## 16        17             597.                4           0.334 
+## 17        18             566.               23           1.40  
+## 18        19             596.                5           0     
+## 19        20             588.               11           0     
+## # ... with 38 more variables: `In Center:Center:Duration` <dbl>, `In
+## #   Center:Center:Frequency` <dbl>, `In Center:Center:Latency to
+## #   first` <dbl>, `In Zone:Center/Center-point:Duration` <dbl>, `In
+## #   Zone:Center/Center-point:Frequency` <dbl>, `In
+## #   Zone:Center/Center-point:Latency to first` <dbl>, Treatment <dbl>,
+## #   Sex <fct>, Tag <chr>, `12-Oct` <dbl>, `13-Oct` <dbl>, `14-Oct` <dbl>,
+## #   `15-Oct` <dbl>, `16-Oct` <dbl>, `17-Oct` <dbl>, `18-Oct` <dbl>,
+## #   `19-Oct` <dbl>, `20-Oct` <dbl>, `21-Oct` <dbl>, `22-Oct` <dbl>,
+## #   `23-Oct` <dbl>, `24-Oct` <dbl>, `25-Oct` <dbl>, `26-Oct` <dbl>,
+## #   `27-Oct` <dbl>, `28-Oct` <dbl>, `29-Oct` <dbl>, `30-Oct` <dbl>,
+## #   `31-Oct` <dbl>, `Parent Cage #` <dbl>, `Current Cage #` <dbl>, `Trial
+## #   # Familiar Object` <dbl>, `Trial # Novel Object` <dbl>,
+## #   Comments <chr>, TreatmentStr <fct>, durationInCenter <dbl>,
+## #   durationInBorder <dbl>, durationRatio <dbl>
+\end{verbatim}
+
+Select variables that will be analyzed
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Select variables that will be analyzed}
+\NormalTok{openFieldData <-}\StringTok{ }
+\StringTok{    }\NormalTok{openFieldDataFiltered }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{select}\NormalTok{(}\StringTok{`}\DataTypeTok{Trial #}\StringTok{`}\NormalTok{, TreatmentStr, Sex, durationInCenter, durationInBorder, durationRatio)}
+
+\CommentTok{# Take a look at the data with columns filtered}
+\NormalTok{openFieldData}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 19 x 6
+##    `Trial #` TreatmentStr Sex   durationInCenter durationInBorder
+##        <dbl> <fct>        <fct>            <dbl>            <dbl>
+##  1         2 Control      F                37.1              563.
+##  2         3 Ethosuximide F                18.4              581.
+##  3         4 Control      M                 5.34             594.
+##  4         5 Control      M                47.5              553.
+##  5         6 Ethosuximide F                 7.21             593.
+##  6         7 Ethosuximide F                34.0              566.
+##  7         8 Ethosuximide M                 2.20             598.
+##  8         9 Ethosuximide M                24.5              576.
+##  9        10 Control      M                 9.81             590.
+## 10        11 Ethosuximide F                 8.94             586.
+## 11        12 Ethosuximide F                16.3              584.
+## 12        13 Control      M                32.8              567.
+## 13        14 Control      M                13.1              587.
+## 14        15 Ethosuximide M                15.0              585.
+## 15        16 Ethosuximide M                22.8              577.
+## 16        17 Control      M                 2.80             597.
+## 17        18 Control      F                32.6              566.
+## 18        19 Ethosuximide F                 3.74             596.
+## 19        20 Control      F                12.5              588.
+## # ... with 1 more variable: durationRatio <dbl>
+\end{verbatim}
+
+\subsection{Make plots}\label{make-plots}
+
+\paragraph{Use Duration in Center}\label{use-duration-in-center}
+
+Plot the Duration in Center versus Treatment as a box plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Add the data to the canvas}
+\NormalTok{durationPlot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(openFieldData, }\KeywordTok{aes}\NormalTok{(TreatmentStr, durationInCenter)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Treatment Group"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Duration in Center (s)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Open Field Test for Ethosuximide-treated animals"}\NormalTok{)}
+
+\CommentTok{# Plot as a combination of jitter and box plot}
+\NormalTok{durationPlot }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{(}\DataTypeTok{outlier.color =} \StringTok{'red'}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{test_open_field_analysis_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Save the plot}
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"openField_durationCenter_boxplot_jitter.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Plot the Duration in Center versus Treatment as a violin plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plot as a combination of jitter and violin plot}
+\NormalTok{durationPlot }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_violin}\NormalTok{() }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{test_open_field_analysis_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Save the plot}
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"openField_durationCenter_violin_jitter.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Plot the Duration in Center versus Treatment as a beeswarm plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plot as a combination of box and beeswarm plot}
+\NormalTok{durationPlot }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{(}\DataTypeTok{outlier.color =} \StringTok{'red'}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_beeswarm}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{test_open_field_analysis_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Save the plot}
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"openField_durationCenter_boxplot_beeswarm.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Use Ratio of Duration in Border to Duration in
+Center}\label{use-ratio-of-duration-in-border-to-duration-in-center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Add the data to the canvas}
+\NormalTok{durationRatioPlot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(openFieldData, }\KeywordTok{aes}\NormalTok{(TreatmentStr, durationRatio)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Treatment Group"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Duration in Border/Duration in Center"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Open Field Test for Ethosuximide-treated animals"}\NormalTok{)}
+
+\CommentTok{# Plot as a combination of jitter and box plot}
+\NormalTok{durationRatioPlot }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{(}\DataTypeTok{outlier.color =} \StringTok{'red'}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{test_open_field_analysis_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Save the plot}
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"openField_durationRatio_boxplot_jitter.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Plot the Ratio of Duration in Border to Duration in Center as a violin
+plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plot as a combination of jitter and violin plot}
+\NormalTok{durationRatioPlot }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_violin}\NormalTok{() }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_jitter}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+
+\CommentTok{# Save the plot}
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"openField_durationRatio_violin_jitter.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{test_open_field_analysis_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Plot the Ratio of Duration in Border to Duration in Center as a beeswarm
+plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plot as a combination of beeswarm and box plot}
+\NormalTok{durationRatioPlot }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_boxplot}\NormalTok{(}\DataTypeTok{outlier.color =} \StringTok{'red'}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_beeswarm}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{test_open_field_analysis_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Save the plot}
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"openField_durationRatio_boxplot_beeswarm.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}

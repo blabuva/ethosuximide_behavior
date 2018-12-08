@@ -1,0 +1,44 @@
+---
+title: "Test Novel Object Analysis"
+author: "Adam Lu"
+date: "December 5th, 2018"
+output: pdf_document
+---
+
+```{r setup, include = FALSE}
+# Print all code
+knitr::opts_chunk$set(echo = TRUE)
+
+# Define parameters
+header <- c("Trial #", "Animal ID", "Treatment", "Surgery", 
+            "In Border:Periphery/Center-point:Duration", 
+            "In Border:Periphery/Center-point:Frequency", 
+            "In Border:Periphery/Center-point:Latency to first", 
+            "In Center:Center:Duration", 
+            "In Center:Center:Frequency", 
+            "In Center:Center:Latency to first", 
+            "In Zone:Center/Center-point:Duration", 
+            "In Zone:Center/Center-point:Frequency", 
+            "In Zone:Center/Center-point:Latency to first") 
+
+```
+
+## Read in the data
+
+The file **Analysis Output-AV Test Open Field.csv** is TODO:
+
+```{r, message = FALSE}
+# Load libraries (tidyverse includes readr, ... etc.)
+library(tidyverse)
+
+# Import data
+avTestOpenField <- read_csv("Analysis Output-AV Test Open Field.csv", skip = 4, 
+                            col_names = header)
+```
+
+
+
+```{r, message = FALSE}
+# Load libraries
+
+```
