@@ -10,35 +10,77 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 
 # Define parameters
-header <- c("Trial #", "Animal ID", "Treatment", "Surgery", 
-            "In Border:Periphery/Center-point:Duration", 
-            "In Border:Periphery/Center-point:Frequency", 
-            "In Border:Periphery/Center-point:Latency to first", 
-            "In Center:Center:Duration", 
-            "In Center:Center:Frequency", 
-            "In Center:Center:Latency to first", 
-            "In Zone:Center/Center-point:Duration", 
-            "In Zone:Center/Center-point:Frequency", 
-            "In Zone:Center/Center-point:Latency to first") 
+header <- c("Object Type","Trial # NO", "Trial # OF", "Novel Object", "Familiar Object", "Distance to objects:object 1/Nose-point:Mean","Distance to objects:object 2/Nose-point:Mean", "Nose touching objects:object 1/Nose-point:Duration", "Nose touching objects:object 1/Nose-point:Frequency", "Nose touching objects:object 1/Nose-point:Latency to first","Nose touching objects:object 2/Nose-point:Duration", "Nose touching objects:object 2/Nose-point:Frequency", "Nose touching objects:object 2/Nose-point:Latency to first")
+           
 
 ```
 
-## Read in the data
-
-The file **Analysis Output-AV Test Open Field.csv** is TODO:
+Load libraries
 
 ```{r, message = FALSE}
-# Load libraries (tidyverse includes readr, ... etc.)
+# tidyverse includes the packages readr, dplyr, ggplot2 ... etc.
 library(tidyverse)
 
-# Import data
-avTestOpenField <- read_csv("Analysis Output-AV Test Open Field.csv", skip = 4, 
+# ggbeeswarm includes geom_beeswarm()
+library(ggbeeswarm)
+```
+
+## Read in the raw data
+
+Read in the novel object test raw data ([**Analysis Output-VA Novel Object.csv**](Analysis Output-VA Novel Object.csv)):
+
+```{r, message = FALSE}
+# Import novel object data
+novelObjectRaw <- read_csv("Analysis Output-VA Novel Object.csv", skip = 4, 
                             col_names = header)
+# Look at Novel Object data
+novelObjectRaw
+
+```
+
+Read in the data containing the treatment and sex information for each animal (**Injections Data.csv**):
+
+```{r, message = FALSE}
+# Import injections data
+injectionsDataRaw <- read_csv("Injections Data.csv", n_max = 20)
+
+# Take a look at the injections data
+injectionsDataRaw
+```
+
+Read in a table that maps treatment numbers to treatment strings
+
+```{r, message = FALSE}
+# Create a dictionary for Treatment
+treatmentTypeTable <- read_csv("Treatment Dictionary.csv")
+
+# Display the table
+treatmentTypeTable
 ```
 
 
+## Combine and rearrange the data
+
+Starting from the open field raw data, do the following:
+    1. Add the treatment and sex information by matching up the trial number
+    2. Add the treatment string be matching up the treatment number
+    3. Choose the column corresponding to duration in center and rename it
+    4. Choose the column corresponding to duration in border and rename it
+    5. Make "Sex"" a categorical variable
+    6. Make "Treatment" a categorical variable
+
 
 ```{r, message = FALSE}
-# Load libraries
+# Rearrange the data
+# NovelobjectExpanded <- 
+    novelObjectRaw %>% 
+    full_join(injectionsDataRaw, by = c("Trial # OF" = "Trial # Open Field")) %>% 
+    full_join(treatmentTypeTable, by = "Treatment") %>% 
+    mutate(durationobject1 = `Nose touching objects:object 1/Nose-point:Duration`) %>% 
+    mutate(durationobject2 = `Nose touching objects:object 2/Nose-point:Duration`) %>%
+    mutate(Sex = factor(Sex)) %>%
+    mutate(TreatmentStr = factor(TreatmentStr))
 
+# Take a glimpse of all the variables in the data 
+glimpse(NovelobjectExpanded)
 ```
