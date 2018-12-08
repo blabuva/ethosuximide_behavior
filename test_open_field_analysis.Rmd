@@ -62,15 +62,18 @@ injectionsDataRaw <- read_csv("Injections Data.csv", n_max = 20)
 injectionsDataRaw
 ```
 
-Create a table that maps treatment numbers to treatment strings
+Read in a table that maps treatment numbers to treatment strings
 
 ```{r, message = FALSE}
 # Create a dictionary for Treatment
-treatmentTypeTable <- 
-    tibble(Treatment = 0:1, TreatmentStr = c("Control", "Ethosuximide"))
+treatmentTypeTable <- read_csv("Treatment Dictionary.csv")
 
 # Display the table
 treatmentTypeTable
+
+# OLD CODE:
+# treatmentTypeTable <- 
+#     tibble(Treatment = 0:1, TreatmentStr = c("Control", "Ethosuximide"))
 ```
 
 ## Combine and rearrange the data
