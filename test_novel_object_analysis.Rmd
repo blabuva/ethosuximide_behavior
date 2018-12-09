@@ -2,7 +2,7 @@
 title: "Test Novel Object Analysis"
 author: "Alexa & Viktoria"
 date: "December 8th, 2018"
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include = FALSE}
@@ -61,26 +61,130 @@ treatmentTypeTable
 
 ## Combine and rearrange the data
 
-Starting from the open field raw data, do the following:
-    1. Add the treatment and sex information by matching up the trial number
-    2. Add the treatment string be matching up the treatment number
-    3. Choose the column corresponding to duration in center and rename it
-    4. Choose the column corresponding to duration in border and rename it
-    5. Make "Sex"" a categorical variable
-    6. Make "Treatment" a categorical variable
+Starting from the open field raw data, do the following: 
+(TODO: UPDATE)  
+    1. Add the treatment and sex information by matching up the trial number  
+    2. Add the treatment string be matching up the treatment number  
+    3. Choose the column corresponding to duration in center and rename it  
+    4. Choose the column corresponding to duration in border and rename it  
+    5. Make "Sex"" a categorical variable  
+    6. Make "Treatment" a categorical variable  
+    7. Make "DurationObjectRatio" variable  
 
 
 ```{r, message = FALSE}
 # Rearrange the data
-# NovelobjectExpanded <- 
+novelObjectExpanded <- 
     novelObjectRaw %>% 
     full_join(injectionsDataRaw, by = c("Trial # OF" = "Trial # Open Field")) %>% 
     full_join(treatmentTypeTable, by = "Treatment") %>% 
-    mutate(durationobject1 = `Nose touching objects:object 1/Nose-point:Duration`) %>% 
-    mutate(durationobject2 = `Nose touching objects:object 2/Nose-point:Duration`) %>%
+    mutate(DurationObject1 = `Nose touching objects:object 1/Nose-point:Duration`) %>% 
+    mutate(DurationObject2 = `Nose touching objects:object 2/Nose-point:Duration`) %>%
     mutate(Sex = factor(Sex)) %>%
-    mutate(TreatmentStr = factor(TreatmentStr))
+    mutate(TreatmentStr = factor(TreatmentStr)) %>% 
+    mutate(DurationObjectRatio = DurationObject1 / DurationObject2) %>% 
+    mutate(TrialType = factor(`Object Type`)) %>% 
+    mutate(TrialTypeTreatment = interaction(TrialType, TreatmentStr, sep = "-"))
 
 # Take a glimpse of all the variables in the data 
-glimpse(NovelobjectExpanded)
+glimpse(novelObjectExpanded)
 ```
+
+
+Remove the first animal because it was used as a test animal
+
+```{r, message = FALSE}
+# Select all but the first row
+novelObjectFiltered <- 
+    novelObjectExpanded %>% 
+    slice(2:n())
+
+# Take a look at the data with rows filtered
+novelObjectFiltered
+
+```
+
+
+``` {r, message = FALSE}
+# Select variables that will be analyzed
+novelObjectData <- 
+    novelObjectFiltered %>% 
+    select(TrialType, TreatmentStr, Sex, 
+           DurationObject1, DurationObject2, DurationObjectRatio, Tag, TrialTypeTreatment)
+
+# Take a look at the data with columns filtered
+novelObjectData
+
+```
+
+``` {r, message = FALSE, include = FALSE}
+
+# OLD CODE:
+# # Filter data only for Familiar Object Trials
+# familiarObject <-
+# filter(novelObjectFiltered, `Object Type` == "Familiar")
+# 
+# #Filter data only for Novel Object Trials
+# novelObject <-
+# filter(novelObjectFiltered, `Object Type` == "Novel")
+       
+```
+
+## Make plots
+
+#### Use Duration at Object 1 / Duration at Object 2 (Duration Object Ratio)
+
+Plot the Duration Object Ratio versus Trial Type as a box plot, colored by Treatment
+
+``` {r, message = FALSE}
+# Add the data to the canvas
+durationRatioPlot2 <- 
+    ggplot(novelObjectData, aes(TrialType, DurationObjectRatio, color = TreatmentStr)) +
+    xlab("Trial Type") + ylab("Duration Object Ratio") +
+    ggtitle("Novel Object Test for Ethosuximide-treated animals")
+
+# Plot as a combination of jitter and box plot
+durationRatioPlot2 + geom_boxplot(outlier.color = 'purple')
+
+# Save the plot
+ggsave("novelObject_durationObjectRatio_boxplot.png")
+```
+
+``` {r, message = FALSE}
+# Add the data to the canvas
+durationRatioPlot1 <- 
+    ggplot(novelObjectData, aes(TrialTypeTreatment, DurationObjectRatio, color = TreatmentStr)) +
+    xlab("Trial Type") + ylab("Duration Object Ratio") +
+    ggtitle("Novel Object Test for Ethosuximide-treated animals")
+
+# Plot as a combination of jitter and box plot
+durationRatioPlot1 + geom_boxplot(outlier.color = 'purple') +
+    geom_jitter(alpha = 0.75)
+
+# Save the plot
+ggsave("novelObject_durationObjectRatio_boxplot_jitter.png")
+```
+
+Plot the Duration Object Ratio versus Trial Type as a violin plot
+
+``` {r, message = FALSE}
+# Plot as a combination of jitter and violin plot
+durationRatioPlot1 + geom_violin() +
+    geom_jitter(alpha = 0.75)
+
+# Save the plot
+ggsave("novelObject_durationObjectRatio_violin_jitter.png")
+```
+
+Plot the Duration Object Ratio versus Trial Type as a beeswarm plot
+
+``` {r, message = FALSE}
+# Plot as a combination of beeswarm and box plot
+durationRatioPlot1 + geom_boxplot(outlier.color = 'purple') +
+    geom_beeswarm(alpha = 0.75)
+
+# Save the plot
+ggsave("novelObject_durationObjectRatio_boxplot_beeswarm.png")
+```
+
+

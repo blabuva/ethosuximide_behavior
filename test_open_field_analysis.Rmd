@@ -78,14 +78,14 @@ treatmentTypeTable
 
 ## Combine and rearrange the data
 
-Starting from the open field raw data, do the following:
-    1. Add the treatment and sex information by matching up the trial number
-    2. Add the treatment string be matching up the treatment number
-    3. Choose the column corresponding to duration in center and rename it
-    4. Choose the column corresponding to duration in border and rename it
-    5. Make "Sex"" a categorical variable
-    6. Make "Treatment" a categorical variable
-    7. Create a new column for the ratio of duration in border to duration in center
+Starting from the open field raw data, do the following:  
+    1. Add the treatment and sex information by matching up the trial number  
+    2. Add the treatment string be matching up the treatment number  
+    3. Choose the column corresponding to duration in center and rename it  
+    4. Choose the column corresponding to duration in border and rename it  
+    5. Make "Sex"" a categorical variable  
+    6. Make "Treatment" a categorical variable  
+    7. Create a new column for the ratio of duration in border to duration in center  
 
 ```{r, message = FALSE}
 # Rearrange the data
@@ -139,8 +139,8 @@ durationPlot <- ggplot(openFieldData, aes(TreatmentStr, durationInCenter)) +
     ggtitle("Open Field Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
-durationPlot + geom_boxplot(outlier.color = 'red', alpha = 0.25) +
-    geom_jitter(alpha = 0.25)
+durationPlot + geom_boxplot(outlier.color = 'red') +
+    geom_jitter(alpha = 0.75)
 
 # Save the plot
 ggsave("openField_durationCenter_boxplot_jitter.png")
@@ -151,7 +151,7 @@ Plot the Duration in Center versus Treatment as a violin plot
 ``` {r, message = FALSE}
 # Plot as a combination of jitter and violin plot
 durationPlot + geom_violin() +
-    geom_jitter(alpha = 0.25)
+    geom_jitter()
 
 # Save the plot
 ggsave("openField_durationCenter_violin_jitter.png")
@@ -161,8 +161,8 @@ Plot the Duration in Center versus Treatment as a beeswarm plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of box and beeswarm plot
-durationPlot + geom_boxplot(outlier.color = 'red', alpha = 0.25) +
-    geom_beeswarm(alpha = 0.25)
+durationPlot + geom_boxplot(outlier.color = 'red') +
+    geom_beeswarm(alpha = 0.75)
 
 # Save the plot
 ggsave("openField_durationCenter_boxplot_beeswarm.png")
@@ -177,8 +177,8 @@ durationRatioPlot <- ggplot(openFieldData, aes(TreatmentStr, durationRatio)) +
     ggtitle("Open Field Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
-durationRatioPlot + geom_boxplot(outlier.color = 'red', alpha = 0.25) +
-    geom_jitter(alpha = 0.25)
+durationRatioPlot + geom_boxplot(outlier.color = 'red') +
+    geom_jitter(alpha = 0.75)
 
 # Save the plot
 ggsave("openField_durationRatio_boxplot_jitter.png")
@@ -189,7 +189,7 @@ Plot the Ratio of Duration in Border to Duration in Center as a violin plot
 ``` {r, message = FALSE}
 # Plot as a combination of jitter and violin plot
 durationRatioPlot + geom_violin() +
-    geom_jitter(alpha = 0.25)
+    geom_jitter(alpha = 0.75)
 
 # Save the plot
 ggsave("openField_durationRatio_violin_jitter.png")
@@ -199,8 +199,8 @@ Plot the Ratio of Duration in Border to Duration in Center as a beeswarm plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of beeswarm and box plot
-durationRatioPlot + geom_boxplot(outlier.color = 'red', alpha = 0.25) +
-    geom_beeswarm(alpha = 0.25)
+durationRatioPlot + geom_boxplot(outlier.color = 'red') +
+    geom_beeswarm(alpha = 0.75)
 
 # Save the plot
 ggsave("openField_durationRatio_boxplot_beeswarm.png")
