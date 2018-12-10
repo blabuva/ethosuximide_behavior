@@ -1,7 +1,7 @@
 ---
 title: "Test Open Field Analysis"
-author: "Adam Lu"
-date: "December 7th, 2018"
+author: "Alexa & Viktoria & Adam"
+date: "December 10th, 2018"
 output: html_document
 ---
 
@@ -24,9 +24,6 @@ header <- c("Trial #",
             "In Zone:Center/Center-point:Duration", 
             "In Zone:Center/Center-point:Frequency", 
             "In Zone:Center/Center-point:Latency to first") 
-
-# Old Code:
-# header <- c("Trial #", "Animal ID", "Treatment", "Surgery", 
 ```
 
 Load libraries
@@ -37,6 +34,9 @@ library(tidyverse)
 
 # ggbeeswarm includes geom_beeswarm()
 library(ggbeeswarm)
+
+# broom includes tidy()
+library(broom)
 ```
 
 ## Read in the raw data
@@ -84,7 +84,7 @@ Starting from the open field raw data, do the following:
     3. Choose the column corresponding to duration in center and rename it  
     4. Choose the column corresponding to duration in border and rename it  
     5. Make "Sex"" a categorical variable  
-    6. Make "Treatment" a categorical variable  
+    6. Make "TreatmentStr" a categorical variable  
     7. Create a new column for the ratio of duration in border to duration in center  
 
 ```{r, message = FALSE}
@@ -93,11 +93,11 @@ openFieldDataExpanded <-
     openFieldDataRaw %>% 
     full_join(injectionsDataRaw, by = c("Trial #" = "Trial # Open Field")) %>% 
     full_join(treatmentTypeTable, by = "Treatment") %>% 
-    mutate(durationInCenter = `In Zone:Center/Center-point:Duration`) %>% 
-    mutate(durationInBorder = `In Border:Periphery/Center-point:Duration`) %>% 
+    mutate(DurationInCenter = `In Zone:Center/Center-point:Duration`) %>% 
+    mutate(DurationInBorder = `In Border:Periphery/Center-point:Duration`) %>% 
     mutate(Sex = factor(Sex)) %>% 
     mutate(TreatmentStr = factor(TreatmentStr)) %>% 
-    mutate(durationRatio = durationInBorder / durationInCenter)
+    mutate(DurationRatio = DurationInBorder / DurationInCenter)
 
 # Take a glimpse of all the variables in the data 
 glimpse(openFieldDataExpanded)
@@ -121,7 +121,7 @@ Select variables that will be analyzed
 # Select variables that will be analyzed
 openFieldData <- 
     openFieldDataFiltered %>% 
-    select(`Trial #`, TreatmentStr, Sex, durationInCenter, durationInBorder, durationRatio)
+    select(`Trial #`, TreatmentStr, Sex, DurationInCenter, DurationInBorder, DurationRatio)
 
 # Take a look at the data with columns filtered
 openFieldData
@@ -134,13 +134,13 @@ Plot the Duration in Center versus Treatment as a box plot
 
 ``` {r, message = FALSE}
 # Add the data to the canvas
-durationPlot <- ggplot(openFieldData, aes(TreatmentStr, durationInCenter)) +
+durationPlot <- ggplot(openFieldData, aes(TreatmentStr, DurationInCenter)) +
     xlab("Treatment Group") + ylab("Duration in Center (s)") +
     ggtitle("Open Field Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
 durationPlot + geom_boxplot(outlier.color = 'red') +
-    geom_jitter(alpha = 0.75)
+    geom_jitter(alpha = 0.75, width = 0.2)
 
 # Save the plot
 ggsave("openField_durationCenter_boxplot_jitter.png")
@@ -151,7 +151,7 @@ Plot the Duration in Center versus Treatment as a violin plot
 ``` {r, message = FALSE}
 # Plot as a combination of jitter and violin plot
 durationPlot + geom_violin() +
-    geom_jitter()
+    geom_jitter(width = 0.2)
 
 # Save the plot
 ggsave("openField_durationCenter_violin_jitter.png")
@@ -172,46 +172,98 @@ ggsave("openField_durationCenter_boxplot_beeswarm.png")
 
 ``` {r, message = FALSE}
 # Add the data to the canvas
-durationRatioPlot <- ggplot(openFieldData, aes(TreatmentStr, durationRatio)) +
+DurationRatioPlot <- ggplot(openFieldData, aes(TreatmentStr, DurationRatio)) +
     xlab("Treatment Group") + ylab("Duration in Border/Duration in Center") +
     ggtitle("Open Field Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
-durationRatioPlot + geom_boxplot(outlier.color = 'red') +
-    geom_jitter(alpha = 0.75)
+DurationRatioPlot + geom_boxplot(outlier.color = 'red') +
+    geom_jitter(alpha = 0.75, width = 0.2)
 
 # Save the plot
-ggsave("openField_durationRatio_boxplot_jitter.png")
+ggsave("openField_DurationRatio_boxplot_jitter.png")
 ```
 
 Plot the Ratio of Duration in Border to Duration in Center as a violin plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of jitter and violin plot
-durationRatioPlot + geom_violin() +
-    geom_jitter(alpha = 0.75)
+DurationRatioPlot + geom_violin() +
+    geom_jitter(alpha = 0.75, width = 0.2)
 
 # Save the plot
-ggsave("openField_durationRatio_violin_jitter.png")
+ggsave("openField_DurationRatio_violin_jitter.png")
 ```
 
 Plot the Ratio of Duration in Border to Duration in Center as a beeswarm plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of beeswarm and box plot
-durationRatioPlot + geom_boxplot(outlier.color = 'red') +
+DurationRatioPlot + geom_boxplot(outlier.color = 'red') +
     geom_beeswarm(alpha = 0.75)
 
 # Save the plot
-ggsave("openField_durationRatio_boxplot_beeswarm.png")
+ggsave("openField_DurationRatio_boxplot_beeswarm.png")
 ```
 
+## Perform statistics
 
+#### Use Duration in Center
 
+Use the Shapiro-Wilk test to test for normality
 
+``` {r, message = FALSE}
+# Test the entire data set for normality
+shapiro.test(openFieldData$DurationInCenter)
 
+# Test each data set for normality
+tapply(openFieldData$DurationInCenter, openFieldData$TreatmentStr, shapiro.test)
+```
 
+Since the p-values are greater than 0.05, the data sets can be considered normally distributed.
 
+Therefore, we apply the Welch Two Sample t-test to test for any significant difference between treatment groups.
+
+``` {r, message = FALSE}
+# Apply the Welch Two Sample t-test
+tTestResult <-
+    t.test(DurationInCenter ~ TreatmentStr, data = openFieldData)
+tTestResult
+```
+
+Since the p value is greater than 0.05, there isn't any significant difference between treatment groups.
+
+#### Use Ratio of Duration in Border to Duration in Center
+
+Use the Shapiro-Wilk test to test for normality
+
+``` {r, message = FALSE}
+# Test the entire data set for normality
+shapiro.test(openFieldData$DurationRatio)
+
+# Test each data set for normality
+tapply(openFieldData$DurationRatio, openFieldData$TreatmentStr, shapiro.test)
+```
+
+Since none of the p-values are greater than 0.05, the data sets cannot be considered normally distributed.
+
+Therefore, we apply the Wilcoxon rank-sum test (Mann-Whitney U test) to test for any significant difference between treatment groups.
+
+``` {r, message = FALSE}
+# Apply the Wilcoxon rank-sum test (Mann-Whitney U test)
+wTestResult <-
+    wilcox.test(DurationRatio ~ TreatmentStr, data = openFieldData)
+wTestResult
+```
+
+Since the p value > 0.05, there isn't any significant difference between treatment groups.
+
+``` {r, message = FALSE, include = FALSE}
+
+# Old Code:
+# header <- c("Trial #", "Animal ID", "Treatment", "Surgery", 
+
+```
 
 
 

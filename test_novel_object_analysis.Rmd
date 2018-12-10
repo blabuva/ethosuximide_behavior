@@ -1,7 +1,7 @@
 ---
 title: "Test Novel Object Analysis"
-author: "Alexa & Viktoria"
-date: "December 8th, 2018"
+author: "Alexa & Viktoria & Adam"
+date: "December 10th, 2018"
 output: html_document
 ---
 
@@ -10,19 +10,30 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 # Define parameters
-header <- c("Object Type","Trial # NO", "Trial # OF", "Novel Object", "Familiar Object", "Distance to objects:object 1/Nose-point:Mean","Distance to objects:object 2/Nose-point:Mean", "Nose touching objects:object 1/Nose-point:Duration", "Nose touching objects:object 1/Nose-point:Frequency", "Nose touching objects:object 1/Nose-point:Latency to first","Nose touching objects:object 2/Nose-point:Duration", "Nose touching objects:object 2/Nose-point:Frequency", "Nose touching objects:object 2/Nose-point:Latency to first")
-           
+header <- c("Object Type", "Trial # NO", "Trial # OF", 
+            "Novel Object", "Familiar Object", 
+            "Distance to objects:object 1/Nose-point:Mean",
+            "Distance to objects:object 2/Nose-point:Mean", 
+            "Nose touching objects:object 1/Nose-point:Duration", 
+            "Nose touching objects:object 1/Nose-point:Frequency", 
+            "Nose touching objects:object 1/Nose-point:Latency to first",
+            "Nose touching objects:object 2/Nose-point:Duration", 
+            "Nose touching objects:object 2/Nose-point:Frequency", 
+            "Nose touching objects:object 2/Nose-point:Latency to first")
 
 ```
 
 Load libraries
 
 ```{r, message = FALSE}
-# tidyverse includes the packages readr, dplyr, ggplot2 ... etc.
+# tidyverse includes the packages readr, dplyr, ggPlot ... etc.
 library(tidyverse)
 
 # ggbeeswarm includes geom_beeswarm()
 library(ggbeeswarm)
+
+# broom includes tidy()
+library(broom)
 ```
 
 ## Read in the raw data
@@ -58,19 +69,20 @@ treatmentTypeTable <- read_csv("Treatment Dictionary.csv")
 treatmentTypeTable
 ```
 
-
 ## Combine and rearrange the data
 
 Starting from the open field raw data, do the following: 
 (TODO: UPDATE)  
     1. Add the treatment and sex information by matching up the trial number  
     2. Add the treatment string be matching up the treatment number  
-    3. Choose the column corresponding to duration in center and rename it  
-    4. Choose the column corresponding to duration in border and rename it  
+    3. Choose the column corresponding to duration at object 1 and rename it  
+    4. Choose the column corresponding to duration at object 2 and rename it  
     5. Make "Sex"" a categorical variable  
-    6. Make "Treatment" a categorical variable  
-    7. Make "DurationObjectRatio" variable  
-
+    6. Make "TreatmentStr" a categorical variable  
+    6. Make "Object Type" a categorical variable and rename as "TrialType"  
+    7. Compute the "DurationObjectRatio" variable  
+    8. Compute the "DiscriminationIndex" variable (defined by duration at object 1 - duration at object 2 / (duration at object 1 + duration at object 2))  
+    9. Create a "TrialTypeTreatment" variable that combines "TreatmentStr" and "TrialType"  
 
 ```{r, message = FALSE}
 # Rearrange the data
@@ -82,16 +94,16 @@ novelObjectExpanded <-
     mutate(DurationObject2 = `Nose touching objects:object 2/Nose-point:Duration`) %>%
     mutate(Sex = factor(Sex)) %>%
     mutate(TreatmentStr = factor(TreatmentStr)) %>% 
-    mutate(DurationObjectRatio = DurationObject1 / DurationObject2) %>% 
     mutate(TrialType = factor(`Object Type`)) %>% 
-    mutate(TrialTypeTreatment = interaction(TrialType, TreatmentStr, sep = "-"))
+    mutate(DurationObjectRatio = DurationObject1 / DurationObject2) %>% 
+    mutate(DiscriminationIndex = (DurationObject1 - DurationObject2) / (DurationObject1 + DurationObject2)) %>% 
+    mutate(TrialTypeTreatment = interaction(TreatmentStr, TrialType, sep = "-"))
 
 # Take a glimpse of all the variables in the data 
 glimpse(novelObjectExpanded)
 ```
 
-
-Remove the first animal because it was used as a test animal
+Remove the first animal because it was used as a test animal:
 
 ```{r, message = FALSE}
 # Select all but the first row
@@ -104,18 +116,217 @@ novelObjectFiltered
 
 ```
 
+Select only the variables that will be analyzed:
 
 ``` {r, message = FALSE}
 # Select variables that will be analyzed
 novelObjectData <- 
     novelObjectFiltered %>% 
-    select(TrialType, TreatmentStr, Sex, 
-           DurationObject1, DurationObject2, DurationObjectRatio, Tag, TrialTypeTreatment)
+    select(TrialType, Treatment = TreatmentStr, Sex, 
+           DurationObject1, DurationObject2, DurationObjectRatio, DiscriminationIndex, Tag, TrialTypeTreatment)
 
 # Take a look at the data with columns filtered
 novelObjectData
 
 ```
+
+## Make plots
+
+#### Use the Duration Object Ratio (Duration at Object 1 / Duration at Object 2)
+
+Plot the Duration Object Ratio versus Trial Type as a box plot, colored by Treatment
+
+``` {r, message = FALSE}
+# Add the data to the canvas
+durationRatioPlot <- 
+    ggplot(novelObjectData, aes(TrialType, DurationObjectRatio, color = Treatment)) +
+    labs(x = "Trial Type", y = "Duration Object Ratio", 
+         title = "Novel Object Test for Ethosuximide-treated animals")
+
+# Plot as a combination of jitter and box plot
+durationRatioPlot + geom_boxplot(outlier.color = 'purple') +
+    geom_point(alpha = 0.75, position = position_jitterdodge(jitter.width = 0.3))
+
+# Save the plot
+ggsave("novelObject_durationObjectRatio_boxplot_jitter.png")
+```
+
+Plot the Duration Object Ratio versus Trial Type as a violin plot
+
+``` {r, message = FALSE}
+# Plot as a combination of jitter and violin plot
+durationRatioPlot + geom_violin() +
+    geom_point(alpha = 0.75, position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.9))
+
+# Save the plot
+ggsave("novelObject_durationObjectRatio_violin_jitter.png")
+```
+
+Plot the Duration Object Ratio versus Trial Type as a beeswarm plot
+
+``` {r, message = FALSE}
+# Plot as a combination of beeswarm and box plot
+durationRatioPlot + geom_boxplot(outlier.color = 'purple') +
+    geom_beeswarm(alpha = 0.75, dodge.width = 0.75)
+
+# Save the plot
+ggsave("novelObject_durationObjectRatio_boxplot_beeswarm.png")
+```
+
+#### Use Discrimination Index (duration at object 1 - duration at object 2 / (duration at object 1 + duration at object 2)
+
+Plot the Discrimination Index versus Trial Type as a box plot, colored by Treatment
+
+``` {r, message = FALSE}
+# Add the data to the canvas
+discriminationIndexPlot <- 
+    ggplot(novelObjectData, aes(TrialType, DiscriminationIndex, color = Treatment)) +
+    labs(x = "Trial Type", y = "Discrimination Index", 
+         title = "Novel Object Test for Ethosuximide-treated animals")
+
+# Plot as a combination of jitter and box plot
+discriminationIndexPlot + geom_boxplot(outlier.color = 'purple') +
+    geom_point(alpha = 0.75, position = position_jitterdodge(jitter.width = 0.3))
+
+# Save the plot
+ggsave("novelObject_discriminationIndex_boxplot_jitter.png")
+```
+
+Plot the Discrimination Index versus Trial Type as a violin plot
+
+``` {r, message = FALSE}
+# Plot as a combination of jitter and violin plot
+discriminationIndexPlot + geom_violin() +
+    geom_point(alpha = 0.75, position = position_jitterdodge(jitter.width = 0.3, dodge.width = 0.9))
+
+# Save the plot
+ggsave("novelObject_discriminationIndex_violin_jitter.png")
+```
+
+Plot the Discrimination Index versus Trial Type as a beeswarm plot
+
+``` {r, message = FALSE}
+# Plot as a combination of beeswarm and box plot
+discriminationIndexPlot + geom_boxplot(outlier.color = 'purple') +
+    geom_beeswarm(alpha = 0.75, dodge.width = 0.75)
+
+# Save the plot
+ggsave("novelObject_discriminationIndex_boxplot_beeswarm.png")
+```
+
+## Perform statistics
+
+#### Use the Duration Object Ratio (Duration at Object 1 / Duration at Object 2)
+
+Use the Shapiro-Wilk test to test for normality
+
+``` {r, message = FALSE}
+# Test the entire data set for normality
+shapiro.test(novelObjectData$DurationObjectRatio)
+
+# Test each data set for normality
+tapply(novelObjectData$DurationObjectRatio, novelObjectData$TrialTypeTreatment, shapiro.test)
+```
+
+Since the p-values for grouped data are greater than 0.05, the data sets can be considered normally distributed.
+
+First, we apply the Welch Two Sample t-test for each trial type to test for any significant difference between treatment groups.
+
+``` {r, message = FALSE}
+# Filter the data by trial type
+familiarTrialData <- 
+  novelObjectData %>% filter(TrialType == "Familiar")
+novelTrialData <- 
+  novelObjectData %>% filter(TrialType == "Novel")
+
+# Apply the Welch Two Sample t-test for each trial
+tTestResultFamiliar <-
+    t.test(DurationObjectRatio ~ Treatment, data = familiarTrialData)
+tTestResultNovel <-
+    t.test(DurationObjectRatio ~ Treatment, data = novelTrialData)
+
+tTestResultFamiliar
+tTestResultNovel
+```
+
+Since the p value > 0.05, there isn't any significant difference between treatment groups.
+
+Next, we apply the Welch Two Sample t-test for each treatment type to test for any significant difference between trials.
+
+``` {r, message = FALSE}
+# Filter the data by trial type
+controlData <- 
+  novelObjectData %>% filter(Treatment == "Control")
+ethosuximideData <- 
+  novelObjectData %>% filter(Treatment == "Ethosuximide")
+
+# Apply the Welch Two Sample t-test for each trial
+tTestResultControl <-
+    t.test(DurationObjectRatio ~ TrialType, data = controlData)
+tTestResultEthosuximide <-
+    t.test(DurationObjectRatio ~ TrialType, data = ethosuximideData)
+
+tTestResultControl
+tTestResultEthosuximide
+```
+
+Since the p value > 0.05, there is not really any significant difference between trials either.
+
+#### Use Discrimination Index (duration at object 1 - duration at object 2 / (duration at object 1 + duration at object 2)
+
+Use the Shapiro-Wilk test to test for normality
+
+``` {r, message = FALSE}
+# Test the entire data set for normality
+shapiro.test(novelObjectData$DiscriminationIndex)
+
+# Test each data set for normality
+tapply(novelObjectData$DiscriminationIndex, novelObjectData$TrialTypeTreatment, shapiro.test)
+```
+
+Since the p-values for grouped data are greater than 0.05, the data sets can be considered normally distributed.
+
+First, we apply the Welch Two Sample t-test for each trial type to test for any significant difference between treatment groups.
+
+``` {r, message = FALSE}
+# Filter the data by trial type
+familiarTrialData <- 
+  novelObjectData %>% filter(TrialType == "Familiar")
+novelTrialData <- 
+  novelObjectData %>% filter(TrialType == "Novel")
+
+# Apply the Welch Two Sample t-test for each trial
+tTestResultFamiliar <-
+    t.test(DiscriminationIndex ~ Treatment, data = familiarTrialData)
+tTestResultNovel <-
+    t.test(DiscriminationIndex ~ Treatment, data = novelTrialData)
+
+tTestResultFamiliar
+tTestResultNovel
+```
+
+Since the p value > 0.05, there isn't any significant difference between treatment groups.
+
+Next, we apply the Welch Two Sample t-test for each treatment type to test for any significant difference between trials.
+
+``` {r, message = FALSE}
+# Filter the data by trial type
+controlData <- 
+  novelObjectData %>% filter(Treatment == "Control")
+ethosuximideData <- 
+  novelObjectData %>% filter(Treatment == "Ethosuximide")
+
+# Apply the Welch Two Sample t-test for each trial
+tTestResultControl <-
+    t.test(DiscriminationIndex ~ TrialType, data = controlData)
+tTestResultEthosuximide <-
+    t.test(DiscriminationIndex ~ TrialType, data = ethosuximideData)
+
+tTestResultControl
+tTestResultEthosuximide
+```
+
+Since the p value > 0.05, there is not really any significant difference between trials either.
 
 ``` {r, message = FALSE, include = FALSE}
 
@@ -127,64 +338,18 @@ novelObjectData
 # #Filter data only for Novel Object Trials
 # novelObject <-
 # filter(novelObjectFiltered, `Object Type` == "Novel")
+
+# durationRatioPlot1 <- 
+#     ggplot(novelObjectData, aes(TrialTypeTreatment, DurationObjectRatio, color = TreatmentStr)) +
+#     xlab("Treatment-Trial Type") + ylab("Duration Object Ratio") +
+#     ggtitle("Novel Object Test for Ethosuximide-treated animals")
+# durationRatioPlot1 + geom_boxplot(outlier.color = 'purple') +
+#     geom_jitter(alpha = 0.75, width = 0.2)
+
+# xlab("Trial Type") + ylab("Duration Object Ratio") + 
+# ggtitle("Novel Object Test for Ethosuximide-treated animals")
+
+# mutate(TrialTypeTreatment = interaction(TrialType, TreatmentStr, sep = "-"))
        
 ```
-
-## Make plots
-
-#### Use Duration at Object 1 / Duration at Object 2 (Duration Object Ratio)
-
-Plot the Duration Object Ratio versus Trial Type as a box plot, colored by Treatment
-
-``` {r, message = FALSE}
-# Add the data to the canvas
-durationRatioPlot2 <- 
-    ggplot(novelObjectData, aes(TrialType, DurationObjectRatio, color = TreatmentStr)) +
-    xlab("Trial Type") + ylab("Duration Object Ratio") +
-    ggtitle("Novel Object Test for Ethosuximide-treated animals")
-
-# Plot as a combination of jitter and box plot
-durationRatioPlot2 + geom_boxplot(outlier.color = 'purple')
-
-# Save the plot
-ggsave("novelObject_durationObjectRatio_boxplot.png")
-```
-
-``` {r, message = FALSE}
-# Add the data to the canvas
-durationRatioPlot1 <- 
-    ggplot(novelObjectData, aes(TrialTypeTreatment, DurationObjectRatio, color = TreatmentStr)) +
-    xlab("Trial Type") + ylab("Duration Object Ratio") +
-    ggtitle("Novel Object Test for Ethosuximide-treated animals")
-
-# Plot as a combination of jitter and box plot
-durationRatioPlot1 + geom_boxplot(outlier.color = 'purple') +
-    geom_jitter(alpha = 0.75)
-
-# Save the plot
-ggsave("novelObject_durationObjectRatio_boxplot_jitter.png")
-```
-
-Plot the Duration Object Ratio versus Trial Type as a violin plot
-
-``` {r, message = FALSE}
-# Plot as a combination of jitter and violin plot
-durationRatioPlot1 + geom_violin() +
-    geom_jitter(alpha = 0.75)
-
-# Save the plot
-ggsave("novelObject_durationObjectRatio_violin_jitter.png")
-```
-
-Plot the Duration Object Ratio versus Trial Type as a beeswarm plot
-
-``` {r, message = FALSE}
-# Plot as a combination of beeswarm and box plot
-durationRatioPlot1 + geom_boxplot(outlier.color = 'purple') +
-    geom_beeswarm(alpha = 0.75)
-
-# Save the plot
-ggsave("novelObject_durationObjectRatio_boxplot_beeswarm.png")
-```
-
 

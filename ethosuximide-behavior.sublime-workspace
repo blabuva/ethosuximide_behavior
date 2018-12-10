@@ -1,0 +1,545 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"pfile",
+				"pfilesDirectory"
+			],
+			[
+				"hold",
+				"holdcurrent"
+			],
+			[
+				"numswps",
+				"numswpsCpr"
+			],
+			[
+				"Uni",
+				"UniformOutput"
+			],
+			[
+				"out",
+				"outparams"
+			],
+			[
+				"defaultFitwinC",
+				"defaultFitwinCpr"
+			],
+			[
+				"fitwinCpr",
+				"defaultFitwinCpr"
+			],
+			[
+				"total",
+				"totalswpw"
+			],
+			[
+				"iThresh",
+				"iThreshold2ToInclude"
+			],
+			[
+				"St",
+				"Stdev_best"
+			],
+			[
+				"plotm",
+				"plotmode"
+			],
+			[
+				"new_peak",
+				"new_peakclassR"
+			],
+			[
+				"min_th",
+				"min_thresholdR"
+			],
+			[
+				"cell",
+				"cellidrow"
+			],
+			[
+				"outfolder",
+				"outfolder_hist"
+			],
+			[
+				"max",
+				"max_numComponents_1"
+			],
+			[
+				"peakclass",
+				"peakclass_labels"
+			],
+			[
+				"peakclas",
+				"peakclass_labels"
+			],
+			[
+				"peak",
+				"peakclass_labels"
+			],
+			[
+				"Min",
+				"Min_Threshold"
+			],
+			[
+				"outfold",
+				"outfolder"
+			],
+			[
+				"Max",
+				"Max_NumComponents"
+			],
+			[
+				"ide",
+				"identifier"
+			],
+			[
+				"avgS",
+				"avgSlopesThisTrunc"
+			],
+			[
+				"vSim",
+				"vsimBase"
+			],
+			[
+				"cpr",
+				"cprflag"
+			],
+			[
+				"dir",
+				"dirsToCheck"
+			],
+			[
+				"initi",
+				"initialSlopeFilenames"
+			],
+			[
+				"initial",
+				"initialSlopes"
+			],
+			[
+				"init",
+				"initialSlopes"
+			],
+			[
+				"check",
+				"check_subdir"
+			],
+			[
+				"op",
+				"optimizer4gabab"
+			],
+			[
+				"line",
+				"lineNumberToday"
+			],
+			[
+				"lineN",
+				"lineNumberPrimary"
+			],
+			[
+				"use",
+				"userName"
+			],
+			[
+				"server",
+				"serverName"
+			],
+			[
+				"last",
+				"lastIPSCtime"
+			],
+			[
+				"maxslop",
+				"maxslopeval"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "test_open_field_analysis.Rmd",
+			"settings":
+			{
+				"buffer_size": 7901,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "test_novel_object_analysis.Rmd",
+			"settings":
+			{
+				"buffer_size": 11847,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Remove Package"
+			]
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 150.0,
+		"history":
+		[
+			"move",
+			"\"Export to HTML: Show Export Menu\"",
+			"Export to HTML: Show Export Menu"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"//128.143.17.146/shareX/Alexoria/ethosuximide_behavior"
+	],
+	"file_history":
+	[
+		"//128.143.17.146/shareX/Alexoria/ethosuximide_behavior/test_novel_object_analysis.Rmd",
+		"//128.143.17.146/shareX/Alexoria/ethosuximide_behavior/test_open_field_analysis.tex",
+		"//128.143.17.146/shareX/Alexoria/ethosuximide-behavior/test_open_field_analysis.tex",
+		"//128.143.17.146/adamX/Settings_Anaconda/Installation/rstudio.desktop",
+		"//128.143.17.146/adamX/Settings_Anaconda/Installation/spyder3.desktop",
+		"//128.143.17.146/shareX/share/ATFit/processed/by_scorer/Ashley/2018_09_28_3/2018_09_28_3_pClamp.txt",
+		"//128.143.17.146/adamX/Settings_Matlab/Instructions_setup_Matlab.md",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/m3ha_specs_for_fitmode.m",
+		"//128.143.17.146/adamX/m3ha/data_dclamp/data_dclamp_fishfish.sublime-project",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/plot_pulse_response.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/plot_pulse.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/plot_cfit_pulse_response.m",
+		"//128.143.54.23/adam/m3ha/data_dclamp/dclampPassiveFitter.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/m3ha_correct_unbalanced_bridge.m",
+		"//128.143.17.146/adamX/Settings_Linux/shell_script_syntax.sh",
+		"//128.143.54.23/adam/m3ha/optimizer4gabab/parallel_singleneuronfitting22.m",
+		"//128.143.54.23/adam/m3ha/optimizer4gabab/20181002_singleneuronfitting40/20181002T0834_D091710/20181002T0834_D091710_cpr_swp156.out",
+		"//128.143.54.23/adam/m3ha/optimizer4gabab/20181001_singleneuronfitting40/20181001T2223_D091710/20181001T2223_D091710_cpr_swp1.out",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting36.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/optimizergui_4compgabab.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting38.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/20180912_singleneuronfitting36/copy_figures_20180913.sh",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting35_Rivanna.slurm",
+		"//128.143.17.146/MatlabFishFish/Downloaded_Functions/plotSpread/isEven.m",
+		"//128.143.17.146/MatlabFishFish/Downloaded_Functions/strsplit_PROBLEM_FILE.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting27.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/log_errors_params.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuron4compgabab.hoc",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/find_LTS.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/compare_and_plot_across_conditions2.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/compare_and_plot_across_IC.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/find_IPSC_peak.m",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180810_singleneuronfitting26/20180810T0254_D091710/simplex_3/20180810T0254_D091710_cpr_simplexrun_3_simplexlog.txt",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180810_singleneuronfitting26/20180810T0254_D091710/simplex_25/20180810T0254_D091710_cpr_simplexrun_25_simplexlog.txt",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180810_singleneuronfitting26/20180810T0254_D091710/simplex_11/20180810T0254_D091710_cpr_simplexrun_11_simplexlog.txt",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180810_singleneuronfitting26/20180810T0254_D091710/simplex_1/20180810T0254_D091710_cpr_simplexrun_1_simplexlog.txt",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting25.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting26.m",
+		"//128.143.17.146/adamX/Source_Codes/nrn-7.4/src/nrnoc/passive.mod",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/fit_gaussians_and_refine_threshold.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/import_rawtraces.m",
+		"//128.143.17.146/adamX/m3ha/data_dclamp/PlotHistogramsRefineThreshold.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/rsync_to_tmp.sh",
+		"//128.143.17.146/adamX/Settings_Linux/scripts/adams_commands.sh",
+		"//128.143.17.146/adamX/m3ha/data_dclamp/find_initial_slopes.m",
+		"//128.143.17.146/MatlabFishFish/Marks_Functions/zof_mark.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/fit_kernel.m",
+		"//128.143.17.146/adamX/Settings_Matlab/function_template.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/plot_pdf.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/TC3.tem",
+		"//128.143.17.146/adamX/Python_files/Exercises/cheeseshop.py",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/compute_rms_error.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/compute_IMax_GHK.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/compute_eRev.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/compute_elcurr.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/compute_rmsError.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/compute_hinf_IT.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/run_neuron_once_4compgabab.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting24.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/20180626_singleneuronfitting22_omitDcStepsFlag_1/singleneuronfitting22.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/20180424_singleneuronfitting21_Rivanna/singleneuronfitting21.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting_metadata.md",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/results/README.md",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/launch_singleneuronfitting22_Rivanna1-36.sh",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting23.m",
+		"//128.143.17.146/adamX/Settings_Linux/template.sh",
+		"//128.143.17.146/adamX/m3ha/data_dclamp/take4/clear.sh",
+		"//128.143.17.146/adamX/m3ha/data_dclamp/take4/create_readme_cprtraces.sh",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/check_dir.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/check_subdir.m",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180621_singleneuronfitting22/20180621T1055_A092810/import_rawtraces.log",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180621_singleneuronfitting22/20180621T1105_A092810/import_rawtraces.log",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/print_structure.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/load_examples.m",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180621_singleneuronfitting22/20180621T0552_E092710/import_rawtraces.log",
+		"//128.143.17.146/tmp-data/m3ha/optimizer4gabab/20180621_singleneuronfitting22/20180621T0552_C092710/import_rawtraces.log",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/print_cellstr_old_please_see_Miras_Functions.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/print_cellstr.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/find_passive_params.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/find_ind_str_in_cell.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/csvwrite_with_header.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/remove_outliers.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/histogram_include_outofrange.m",
+		"//128.143.17.146/MatlabFishFish/Adams_Functions/compute_slope.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/select_rawtraces.m",
+		"//128.143.17.146/adamX/m3ha/data_dclamp/find_ind_to_fit.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/optimizer4gabab.sublime-project",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/singleneuronfitting20.m",
+		"//128.143.17.146/adamX/m3ha/optimizer4gabab/nrnivmodl_output_fishfish.txt",
+		"/V/Adams_Functions/histogram_include_outofrange.m",
+		"/X/m3ha/optimizer4gabab/singleneuronfitting20.m",
+		"//128.143.16.164/adamX/m3ha/optimizer4gabab/singleneuronfitting20.m",
+		"//128.143.16.164/adamX/m3ha/optimizer4gabab/20180424_singleneuronfitting20/singleneuronfitting20.m",
+		"//128.143.16.164/adamX/m3ha/data_dclamp/mark_dclamp_dynadell_201012/dynaoutput/10O08-14_37_12.PRN",
+		"//128.143.16.164/shareX/Adam/copy_singleneuronfitting_results_2.sh",
+		"//128.143.16.164/adamX/m3ha/optimizer4gabab/TC3.tem",
+		"/X/m3ha/optimizer4gabab/singleneuronfitting21_Rivanna.slurm",
+		"/X/m3ha/optimizer4gabab/singleneuronfitting21.m",
+		"/X/m3ha/optimizer4gabab/launch_singleneuronfitting22_Rivanna1-36.sh",
+		"/X/m3ha/optimizer4gabab/launch_singleneuronfitting21_Rivanna1,3-11,13-36.sh",
+		"/X/m3ha/optimizer4gabab/launch_singleneuronfitting21_Rivanna2,12.sh",
+		"/X/m3ha/optimizer4gabab/launch_singleneuronfitting21_Rivanna1-36.sh",
+		"/X/m3ha/optimizer4gabab/parallel_singleneuronfitting21.m",
+		"/X/m3ha/optimizer4gabab/optimizer4gabab.sublime-project",
+		"/X/m3ha/optimizer4gabab/select_rawtraces.m",
+		"/X/m3ha/optimizer4gabab/optimizer_4compgabab.m",
+		"/X/m3ha/optimizer4gabab/singleneuronfitting19_Rivanna.slurm",
+		"/X/m3ha/optimizer4gabab/launch_singleneuronfitting19_Rivanna1-36.sh",
+		"/C/Users/Adam/AppData/Roaming/Sublime Text 3/Packages/HighlightWords/HighlightWords.sublime-settings",
+		"/X/Settings_Sublime_Text/To_Place_Under_Packages/User/HighlightWords.sublime-settings",
+		"/X/Settings_Sublime_Text/To_Place_Under_Packages/User/Preferences.sublime-settings",
+		"/X/Rivanna/To Download/new_commands.txt",
+		"/X/Settings_Linux/ls_numfiles.sh",
+		"/X/Settings_Linux/setup_binfiles.sh",
+		"/X/Settings_Linux/store_binfiles.sh",
+		"/X/Settings_Linux/setup_dotfiles.sh",
+		"/X/Settings_Linux/store_dotfiles.sh",
+		"/X/Settings_Linux/template.sh",
+		"/X/Settings_Linux/blanimalNotice.sh",
+		"/X/Settings_Linux/test.sh",
+		"/X/Settings_Linux/eegNoticeGeneWean.sh",
+		"/X/Settings_Linux/eegNoticeGeneWeanWeek.sh",
+		"/X/Settings_Linux/blanimalNoticeToAdamOnly.sh",
+		"/X/Settings_Linux/check_and_copy.sh",
+		"/X/Settings_Linux/testProblem.sh",
+		"/X/Settings_Linux/setup_all_desktopfiles.sh",
+		"/X/Settings_Linux/setup_desktopfiles.sh",
+		"/X/Introduction to Linux/Settings_Linux/blanimalNotice.sh"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 122.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"DurationObjectRatio",
+			"durationRatioPlot1",
+			"durationRatioPlot2",
+			"durationObjectRatio",
+			"DurationObjectRatio",
+			"Duration Object Ratio"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"DiscriminationIndex",
+			"discriminationIndexPlot1",
+			"discriminationIndexPlot2",
+			"discriminationIndex",
+			"DiscriminationIndex",
+			"Discrimination Index"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "test_open_field_analysis.Rmd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7901,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3483.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "test_novel_object_analysis.Rmd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11847,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10697,
+								10697
+							],
+							[
+								10793,
+								10793
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 8779.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 36.0
+	},
+	"input":
+	{
+		"height": 48.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "ethosuximide-behavior.sublime-project",
+	"replace":
+	{
+		"height": 88.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 319.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
