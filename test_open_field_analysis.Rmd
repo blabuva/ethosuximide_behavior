@@ -121,7 +121,8 @@ Select variables that will be analyzed
 # Select variables that will be analyzed
 openFieldData <- 
     openFieldDataFiltered %>% 
-    select(`Trial #`, TreatmentStr, Sex, DurationInCenter, DurationInBorder, DurationRatio)
+    select(`Trial #`, Treatment = TreatmentStr, Sex, 
+           DurationInCenter, DurationInBorder, DurationRatio)
 
 # Take a look at the data with columns filtered
 openFieldData
@@ -134,13 +135,13 @@ Plot the Duration in Center versus Treatment as a box plot
 
 ``` {r, message = FALSE}
 # Add the data to the canvas
-durationPlot <- ggplot(openFieldData, aes(TreatmentStr, DurationInCenter)) +
+durationPlot <- ggplot(openFieldData, aes(Treatment, DurationInCenter)) +
     xlab("Treatment Group") + ylab("Duration in Center (s)") +
     ggtitle("Open Field Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
-durationPlot + geom_boxplot(outlier.color = 'red') +
-    geom_jitter(alpha = 0.75, width = 0.2)
+durationPlot + geom_boxplot(outlier.alpha = 0) +
+    geom_jitter(aes(color = Sex), alpha = 0.75, width = 0.2)
 
 # Save the plot
 ggsave("openField_durationCenter_boxplot_jitter.png")
@@ -151,7 +152,7 @@ Plot the Duration in Center versus Treatment as a violin plot
 ``` {r, message = FALSE}
 # Plot as a combination of jitter and violin plot
 durationPlot + geom_violin() +
-    geom_jitter(width = 0.2)
+    geom_jitter(aes(color = Sex), width = 0.2)
 
 # Save the plot
 ggsave("openField_durationCenter_violin_jitter.png")
@@ -161,8 +162,8 @@ Plot the Duration in Center versus Treatment as a beeswarm plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of box and beeswarm plot
-durationPlot + geom_boxplot(outlier.color = 'red') +
-    geom_beeswarm(alpha = 0.75)
+durationPlot + geom_boxplot(outlier.alpha = 0) +
+    geom_beeswarm(aes(color = Sex), alpha = 0.75)
 
 # Save the plot
 ggsave("openField_durationCenter_boxplot_beeswarm.png")
@@ -172,13 +173,13 @@ ggsave("openField_durationCenter_boxplot_beeswarm.png")
 
 ``` {r, message = FALSE}
 # Add the data to the canvas
-DurationRatioPlot <- ggplot(openFieldData, aes(TreatmentStr, DurationRatio)) +
+DurationRatioPlot <- ggplot(openFieldData, aes(Treatment, DurationRatio)) +
     xlab("Treatment Group") + ylab("Duration in Border/Duration in Center") +
     ggtitle("Open Field Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
-DurationRatioPlot + geom_boxplot(outlier.color = 'red') +
-    geom_jitter(alpha = 0.75, width = 0.2)
+DurationRatioPlot + geom_boxplot(outlier.alpha = 0) +
+    geom_jitter(aes(color = Sex), alpha = 0.75, width = 0.2)
 
 # Save the plot
 ggsave("openField_DurationRatio_boxplot_jitter.png")
@@ -189,7 +190,7 @@ Plot the Ratio of Duration in Border to Duration in Center as a violin plot
 ``` {r, message = FALSE}
 # Plot as a combination of jitter and violin plot
 DurationRatioPlot + geom_violin() +
-    geom_jitter(alpha = 0.75, width = 0.2)
+    geom_jitter(aes(color = Sex), alpha = 0.75, width = 0.2)
 
 # Save the plot
 ggsave("openField_DurationRatio_violin_jitter.png")
@@ -199,8 +200,8 @@ Plot the Ratio of Duration in Border to Duration in Center as a beeswarm plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of beeswarm and box plot
-DurationRatioPlot + geom_boxplot(outlier.color = 'red') +
-    geom_beeswarm(alpha = 0.75)
+DurationRatioPlot + geom_boxplot(outlier.alpha = 0) +
+    geom_beeswarm(aes(color = Sex), alpha = 0.75)
 
 # Save the plot
 ggsave("openField_DurationRatio_boxplot_beeswarm.png")
@@ -217,7 +218,7 @@ Use the Shapiro-Wilk test to test for normality
 shapiro.test(openFieldData$DurationInCenter)
 
 # Test each data set for normality
-tapply(openFieldData$DurationInCenter, openFieldData$TreatmentStr, shapiro.test)
+tapply(openFieldData$DurationInCenter, openFieldData$Treatment, shapiro.test)
 ```
 
 Since the p-values are greater than 0.05, the data sets can be considered normally distributed.
@@ -227,11 +228,26 @@ Therefore, we apply the Welch Two Sample t-test to test for any significant diff
 ``` {r, message = FALSE}
 # Apply the Welch Two Sample t-test
 tTestResult <-
-    t.test(DurationInCenter ~ TreatmentStr, data = openFieldData)
+    t.test(DurationInCenter ~ Treatment, data = openFieldData)
 tTestResult
 ```
 
 Since the p value is greater than 0.05, there isn't any significant difference between treatment groups.
+
+However, there might be a significant difference between treatment groups when sex is accounted for. Therefore, we can generate a linear model of the duration in center against both treatment group and sex.
+
+``` {r, message = FALSE}
+# Try modeling the DurationInCenter against Treatment and Sex
+openFieldFit <- lm(DurationInCenter ~ Treatment + Sex, data = openFieldData)
+
+# See what the model looks like
+summary(openFieldFit)
+
+# In table format
+tidy(openFieldFit)
+```
+
+It looks like there is no significant interaction between duration in center and either treatment group when sex is account for (p value = **0.5**) or sex when treatment group is accounted for (p value = **0.3**)
 
 #### Use Ratio of Duration in Border to Duration in Center
 
@@ -242,7 +258,7 @@ Use the Shapiro-Wilk test to test for normality
 shapiro.test(openFieldData$DurationRatio)
 
 # Test each data set for normality
-tapply(openFieldData$DurationRatio, openFieldData$TreatmentStr, shapiro.test)
+tapply(openFieldData$DurationRatio, openFieldData$Treatment, shapiro.test)
 ```
 
 Since none of the p-values are greater than 0.05, the data sets cannot be considered normally distributed.
@@ -252,17 +268,22 @@ Therefore, we apply the Wilcoxon rank-sum test (Mann-Whitney U test) to test for
 ``` {r, message = FALSE}
 # Apply the Wilcoxon rank-sum test (Mann-Whitney U test)
 wTestResult <-
-    wilcox.test(DurationRatio ~ TreatmentStr, data = openFieldData)
+    wilcox.test(DurationRatio ~ Treatment, data = openFieldData)
 wTestResult
 ```
 
 Since the p value > 0.05, there isn't any significant difference between treatment groups.
+
+## Conclusion
+
+There is no significant difference in anxiety between the treatment groups, whether or not sex is accounted for.
 
 ``` {r, message = FALSE, include = FALSE}
 
 # Old Code:
 # header <- c("Trial #", "Animal ID", "Treatment", "Surgery", 
 
+# geom_boxplot(outlier.color = 'purple')
 ```
 
 

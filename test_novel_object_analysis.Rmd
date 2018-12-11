@@ -144,7 +144,7 @@ durationRatioPlot <-
          title = "Novel Object Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
-durationRatioPlot + geom_boxplot(outlier.color = 'purple') +
+durationRatioPlot + geom_boxplot(outlier.alpha = 0) +
     geom_point(alpha = 0.75, position = position_jitterdodge(jitter.width = 0.3))
 
 # Save the plot
@@ -166,7 +166,7 @@ Plot the Duration Object Ratio versus Trial Type as a beeswarm plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of beeswarm and box plot
-durationRatioPlot + geom_boxplot(outlier.color = 'purple') +
+durationRatioPlot + geom_boxplot(outlier.alpha = 0) +
     geom_beeswarm(alpha = 0.75, dodge.width = 0.75)
 
 # Save the plot
@@ -185,7 +185,7 @@ discriminationIndexPlot <-
          title = "Novel Object Test for Ethosuximide-treated animals")
 
 # Plot as a combination of jitter and box plot
-discriminationIndexPlot + geom_boxplot(outlier.color = 'purple') +
+discriminationIndexPlot + geom_boxplot(outlier.alpha = 0) +
     geom_point(alpha = 0.75, position = position_jitterdodge(jitter.width = 0.3))
 
 # Save the plot
@@ -207,7 +207,7 @@ Plot the Discrimination Index versus Trial Type as a beeswarm plot
 
 ``` {r, message = FALSE}
 # Plot as a combination of beeswarm and box plot
-discriminationIndexPlot + geom_boxplot(outlier.color = 'purple') +
+discriminationIndexPlot + geom_boxplot(outlier.alpha = 0) +
     geom_beeswarm(alpha = 0.75, dodge.width = 0.75)
 
 # Save the plot
@@ -286,7 +286,7 @@ tapply(novelObjectData$DiscriminationIndex, novelObjectData$TrialTypeTreatment, 
 
 Since the p-values for grouped data are greater than 0.05, the data sets can be considered normally distributed.
 
-First, we apply the Welch Two Sample t-test for each trial type to test for any significant difference between treatment groups.
+First, we apply the Welch Two Sample t-test to test for any significant difference between treatment groups, for each trial type.
 
 ``` {r, message = FALSE}
 # Filter the data by trial type
@@ -305,9 +305,9 @@ tTestResultFamiliar
 tTestResultNovel
 ```
 
-Since the p value > 0.05, there isn't any significant difference between treatment groups.
+Since the p value > 0.05, there isn't any significant difference between treatment groups for each trial type.
 
-Next, we apply the Welch Two Sample t-test for each treatment type to test for any significant difference between trials.
+Next, we apply the Welch Two Sample t-test to test for any significant difference between trial types, for each treatment group.
 
 ``` {r, message = FALSE}
 # Filter the data by trial type
@@ -326,9 +326,55 @@ tTestResultControl
 tTestResultEthosuximide
 ```
 
-Since the p value > 0.05, there is not really any significant difference between trials either.
+Since the p value > 0.05, there is not really any significant difference between trial types for each treatment group.
 
-``` {r, message = FALSE, include = FALSE}
+However, there is the possibility that there is a significant difference between trial types across all treatment groups, or a significant difference between treatments across all trial types. Let's do an ANOVA (or a linear model) to measure if there is any interaction between Discrimination Index and trial type or treatment, when the other variable is accounted for.
+
+```{r, message = FALSE}
+# Two Way Anova Interaction Effect
+novelObjectAnova <- aov(DiscriminationIndex ~ TrialType + Treatment, 
+                        data = novelObjectData) 
+
+# Print a summary of the ANOVA table
+summary(novelObjectAnova)
+
+# In table format
+tidy(novelObjectAnova)
+```
+
+```{r, message = FALSE}
+# Try modeling DiscriminationIndex against TrialType and Treatment.
+novelObjectFit <- lm(DiscriminationIndex ~ TrialType + Treatment, data = novelObjectData)
+
+# See what the model looks like
+summary(novelObjectFit)
+
+# In table format
+tidy(novelObjectFit)
+```
+
+It looks like there is a significant interaction between discrimination index and trial type when treatment is accounted for, but not the other way around.
+
+In fact, one can do a simple t-test on trial type regardless of treatment, but we are not trying to do this here.
+
+```{r, message = FALSE}
+# Apply the Welch Two Sample t-test for TrialType
+tTestTrialType <-
+    t.test(DiscriminationIndex ~ TrialType, data = novelObjectData)
+
+tTestTrialType
+
+# Apply the Welch Two Sample t-test for Treatment
+tTestTreatment <-
+    t.test(DiscriminationIndex ~ Treatment, data = novelObjectData)
+tTestTreatment
+```
+
+## Conclusion
+
+There is a significant difference in the discrimination index between trial types across all treatment groups (p value = **0.005**), but not a significant difference between treatments across all trial types (p value = **0.7**).
+
+```{r, message = FALSE, include = FALSE}
 
 # OLD CODE:
 # # Filter data only for Familiar Object Trials
@@ -350,6 +396,10 @@ Since the p value > 0.05, there is not really any significant difference between
 # ggtitle("Novel Object Test for Ethosuximide-treated animals")
 
 # mutate(TrialTypeTreatment = interaction(TrialType, TreatmentStr, sep = "-"))
+
+# # Look at Discrimination Index
+# novelObjectData$DiscriminationIndex
+
        
 ```
 
