@@ -34,6 +34,9 @@ library(ggbeeswarm)
 
 # broom includes tidy()
 library(broom)
+
+#ggpubr for paired box plots
+library(ggpubr)
 ```
 
 ## Read in the raw data
@@ -101,6 +104,7 @@ novelObjectExpanded <-
 
 # Take a glimpse of all the variables in the data 
 glimpse(novelObjectExpanded)
+
 ```
 
 Remove the first animal because it was used as a test animal:
@@ -151,6 +155,15 @@ durationRatioPlot + geom_boxplot(outlier.alpha = 0) +
 ggsave("novelObject_durationObjectRatio_boxplot_jitter.png")
 ```
 
+``` {r, message = FALSE}
+#Pair the data to visualize the change from familiar to novel
+ggpaired(novelObjectData, x = "TrialType", y = "DurationObjectRatio", id = "Tag",
+  color = "TrialType", fill = "white", palette = "rainbow(6)", width = 0.5,
+  point.size = 1.2, line.size = 0.5, line.color = "gray", title = "Novel Object Test for Ethosuximide-treated animals - Paired",
+  xlab = FALSE, ylab = "Duration", facet.by = "Treatment")
+
+ggsave("novelObject_durationObjectRatio_pairedboxplot.png")
+```
 Plot the Duration Object Ratio versus Trial Type as a violin plot
 
 ``` {r, message = FALSE}
@@ -368,6 +381,8 @@ tTestTrialType
 tTestTreatment <-
     t.test(DiscriminationIndex ~ Treatment, data = novelObjectData)
 tTestTreatment
+
+
 ```
 
 ## Conclusion

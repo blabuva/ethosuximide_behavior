@@ -1,0 +1,325 @@
+---
+title: "Test Social Assay Analysis"
+author: "Alexa & Viktoria & Adam"
+date: "April 6, 2019"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+# Print all code
+knitr::opts_chunk$set(echo = TRUE)
+
+
+# Define parameters
+header <- c("Trial", "Sex", "Treatment", "Tag", 
+            "Animal Presence", "Distance moved:Center-point",
+            "In zone:object 1 boundary zone/Nose-point:Duration", 
+            "In zone_1:object 1 boundary zone/Nose-point:Frequency", 
+            "In zone_2:object 1 boundary zone/Nose-point:Latency to first",
+            "In zone_3:object 1 boundary zone/Center-point:Duration", 
+            "In zone_4:object 1 boundary zone/Center-point:Frequency", 
+            "In zone_5:object 1 boundary zone/Center-point:Latency to first",
+            "Velocity/Center-point:Mean")
+```
+
+
+
+
+Load libraries
+
+```{r, message = FALSE}
+# tidyverse includes the packages readr, dplyr, ggPlot ... etc.
+library(tidyverse)
+
+# ggbeeswarm includes geom_beeswarm()
+library(ggbeeswarm)
+
+# broom includes tidy()
+library(broom)
+
+# ggplots
+library(ggplot2)
+
+# ggpubr for paired ggplots
+library(ggpubr)
+
+```
+
+## Read in the raw data
+
+Read in the social test raw data ([**Analysis Output-AV Social Duration.csv**](Analysis Output-AV Social Duration.csv)):
+
+```{r, message = FALSE}
+# Import social data
+socialRaw <- read_csv("Analysis Output-AV Social Duration.csv", skip = 4, 
+                            col_names = header)
+# Look at social data
+socialRaw
+
+```
+
+Read in the data containing the treatment and sex information for each animal (**Social Injections Data.csv**):
+
+```{r, message = FALSE}
+# Import injections data
+socialInjectionsDataRaw <- read_csv("Social Injections Data.csv", n_max = 20)
+
+# Take a look at the social injections data
+socialInjectionsDataRaw
+```
+Read in a table that maps treatment numbers to treatment strings
+
+```{r, message = FALSE}
+# Create a dictionary for Treatment
+treatmentTypeTable <- read_csv("Treatment Dictionary.csv")
+
+# Display the table
+treatmentTypeTable
+```
+
+```{r, message = FALSE}
+# Create a dictionary for Animal Presence
+animalPresenceTypeTable <- read_csv("Animal Presence Dictionary.csv")
+
+# Display the table
+animalPresenceTypeTable
+```
+
+## Combine and rearrange the data
+
+Starting from the Social raw data, do the following: 
+(TODO: UPDATE)  
+    1. Combine treatment information  
+    2. Add the treatment string be matching up the treatment number  
+    3. Choose the column corresponding to duration with nose point and rename it  
+    4. Choose the column corresponding to duration with center point and rename it  
+    5. Make "TreatmentStr" a categorical variable 
+    6. Make "PresenceStr" a categorical variable
+    7. Compute the "AnimalIsPresent" variable
+    8. Compute the "AnimalINotPresent" variable
+    9. Rename "Animal Presence" as "TrialType"  
+    10. Create a "TrialTypeTreatment" variable that combines "TreatmentStr" and "TrialType"  
+
+
+```{r, message = FALSE}
+# Rearrange the data
+socialExpanded <- 
+    socialRaw %>% 
+    full_join(treatmentTypeTable, by = "Treatment")  %>%
+    full_join(animalPresenceTypeTable, by = "Animal Presence")  %>%
+    mutate(DurationNosePoint = `In zone:object 1 boundary zone/Nose-point:Duration`) %>%
+    mutate(DurationCenterPoint = `In zone_3:object 1 boundary zone/Center-point:Duration`) %>%
+    mutate(TreatmentStr = factor(TreatmentStr)) %>%
+    mutate(PresenceStr = factor(PresenceStr)) %>%
+    mutate(AnimalIsPresent = `Animal Presence`) %>%
+    mutate(AnimalIsNotPresent = 1 - `Animal Presence`) %>%
+    mutate(TrialType = factor(`Animal Presence`))  %>%
+    mutate(TrialTypeTreatment = interaction(TreatmentStr, TrialType, sep = "-"))
+  
+
+# Take a glimpse of all the variables in the data 
+glimpse(socialExpanded)
+```
+
+
+Remove the 26th animal because he interacted with the novel animal:
+
+```{r, message = FALSE}
+# Select all but the 26th row
+socialFiltered <- 
+     socialExpanded %>% filter(Trial != 25, Trial != 26)
+
+
+# Take a look at the data with rows filter
+socialFiltered
+
+```
+
+
+```{r, message = FALSE}
+# Compute a duration ratio
+socialSummarized <- 
+    socialFiltered %>% 
+    group_by(Tag, TreatmentStr) %>% 
+    summarise(DurationRatio = sum(DurationNosePoint * AnimalIsPresent) / 
+                sum(DurationNosePoint * AnimalIsNotPresent)) %>% 
+    mutate(Direction = if (DurationRatio > 1) "Increased" else "Decreased")
+
+# Take a look at the duration ratio data
+socialSummarized
+
+```
+
+
+Select only the variables that will be analyzed:
+
+``` {r, message = FALSE}
+# Select variables that will be analyzed
+socialData <- 
+    socialFiltered %>% 
+    select(Trial, TrialType, Treatment = TreatmentStr, `Animal Presence`, PresenceStr, Sex, 
+           DurationNosePoint, DurationCenterPoint, Tag, TrialTypeTreatment)
+
+# Take a look at the data with columns filtered
+socialData
+
+```
+
+
+##make plots
+
+``` {r, message = FALSE}
+# Compare two paired samples. Use ggpaired() [ggpubr] to create the paired box plot.
+# ggpaired(socialData, x = "PresenceStr", y = "DurationNosePoint",
+#          color = "Treatment", line.color = "gray", line.size = 0.4,
+#          palette = "jco")+
+#   stat_compare_means(paired = TRUE)
+# 
+# ```
+# ``` {r, message = FALSE}
+# p <- ggpaired(socialData, x = "PresenceStr", y = "DurationNosePoint",
+#           color = "PresenceStr", palette = "jco", 
+#           line.color = "gray", line.size = 0.4,
+#           facet.by = "Treatment", short.panel.labs = FALSE)
+# ```
+
+durationPlot <-
+    ggplot(socialData, aes(PresenceStr, DurationNosePoint, color = Treatment)) +
+    labs(x = "Animal Presence", y = "Duration",
+         title = "Social Behavior Test for Ethosuximide-treated animals")
+
+durationPlot + geom_boxplot(outlier.alpha = 0) +
+    geom_point(alpha = 0.75, position = position_jitterdodge(jitter.width = 0.3))
+
+# p <- ggplot(socialData, aes(PresenceStr, DurationNosePoint )) +
+#   geom_boxplot(aes(color = Treatment)) +
+#   scale_color_manual(values = c("#00AFBB", "#E7B800"))
+# #p + stat_compare_means(method = "t.test")
+# p
+```
+
+
+``` {r, message = FALSE}
+#Pair the data to visualize the change between animal absent or present
+ggpaired(socialData, x = "PresenceStr", y = "DurationNosePoint", id = "Tag",
+  color = "PresenceStr", fill = "white", palette = "rainbow(6)", width = 0.5,
+  point.size = 1.2, line.size = 0.5, line.color = "gray", title = "Social Behavior Test for Ethosuximide-treated animals - paired",
+  xlab = FALSE, ylab = "Duration", facet.by = "Treatment")
+
+ggsave("social_durationNosePoint_pairedboxplot.png")
+```
+``` {r, message = FALSE}
+#Pair the data to visualize the change with duration ratio and treatment
+durationRatioPlot <-
+    ggplot(socialSummarized, aes(TreatmentStr, DurationRatio)) +
+           labs(x = "Treatment", y = "Duration Animal Present:Animal Absent",
+           title = "Social Behavior Test for Ethosuximide-treated Animals using Duration Ratio")
+
+durationRatioPlot + geom_violin() +
+    geom_jitter(aes(color = Direction), alpha = 0.75, width = 0.2)
+
+ggsave("social_durationratio_jitter and violin.png")
+```
+
+#Perform Statistics
+
+Use the Shapiro-Wilk test to test for normality
+
+``` {r, message = FALSE}
+# Test the entire data set for normality
+shapiro.test(socialData$DurationNosePoint)
+
+# Test each data set for normality
+tapply(socialData$DurationNosePoint, socialData$Treatment, shapiro.test)
+```
+
+Since none of the p-values are greater than 0.05, the data sets cannot be considered normally distributed.
+
+Therefore, we apply the Wilcoxon rank-sum test (Mann-Whitney U test) to test for any significant difference between treatment groups.
+
+``` {r, message = FALSE}
+# Apply the Wilcoxon rank-sum test (Mann-Whitney U test)
+wTestResult <-
+    wilcox.test(DurationNosePoint ~ Treatment, data = socialData)
+wTestResult
+```
+
+Since the p value > 0.05, there isn't any significant difference between treatment groups.
+
+Test for Variance
+
+``` {r, message = FALSE}
+var.test(DurationRatio ~ TreatmentStr, socialSummarized,
+         alternative = "two.sided")
+
+```
+
+#Ratio Statistics
+``` {r, message = FALSE}
+# Test the entire data set for normality
+shapiro.test(socialSummarized$DurationRatio)
+
+# Test each data set for normality
+tapply(socialSummarized$DurationRatio, socialSummarized$TreatmentStr, shapiro.test)
+```
+
+Since the p-values are greater than 0.05, the data sets can be considered normally distributed.
+
+Therefore, we apply the Welch Two Sample t-test to test for any significant difference between treatment groups.
+
+``` {r, message = FALSE}
+# Apply the Welch Two Sample t-test
+tTestResult <-
+    t.test(DurationRatio ~ TreatmentStr, data = socialSummarized)
+tTestResult
+
+```
+
+Since the p value is greater than 0.05, there isn't any significant difference between treatment groups.
+
+#Conclusion
+
+There is no significant difference between social interaction between the two treatment groups
+
+```{r, message = FALSE}
+#Old Code
+# Select duration of animal presence or absence
+# animalPresent <-
+#       socialData$DurationNosePoint~PresenceStr
+# 
+# collist <- c("PresenceStr")
+# sel <-apply(socialData[,collist],1,function(row) "Animal Present" %in% row)
+# 
+# filteredPresent <- socialData[sel,]
+# filteredPresent
+# 
+# # animalPresent <- socialData %>% pull(DurationNosePoint.filteredPresent)
+# # %>% filter(DurationNosePoint, PresenceStr == "Animal Present")
+# 
+# 
+# # Take a look at the data with rows filter
+# animalPresent
+# 
+# # Select duration of animalabsence
+# animalAbsent <- 
+#      socialData %>% select(DurationNosePoint, "Animal Presence" = 0)
+# 
+# # Take a look at the data with rows filter
+# animalAbsent
+# 
+# socialData %>%
+#     mutate(DurationPresenceRatio = animalAbsent / animalPresent)
+# 
+# animalAbsent/animalPresent
+```
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
