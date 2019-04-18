@@ -166,7 +166,7 @@ socialData
 ```
 
 
-##make plots
+## Make plots
 
 ``` {r, message = FALSE}
 # Compare two paired samples. Use ggpaired() [ggpubr] to create the paired box plot.
@@ -221,7 +221,7 @@ durationRatioPlot + geom_violin() +
 ggsave("social_durationratio_jitter and violin.png")
 ```
 
-#Perform Statistics
+## Perform Statistics
 
 Use the Shapiro-Wilk test to test for normality
 
@@ -254,7 +254,7 @@ var.test(DurationRatio ~ TreatmentStr, socialSummarized,
 
 ```
 
-#Ratio Statistics
+## Ratio Statistics
 ``` {r, message = FALSE}
 # Test the entire data set for normality
 shapiro.test(socialSummarized$DurationRatio)
@@ -277,7 +277,7 @@ tTestResult
 
 Since the p value is greater than 0.05, there isn't any significant difference between treatment groups.
 
-#Conclusion
+## Conclusion
 
 There is no significant difference between social interaction between the two treatment groups
 
